@@ -1,0 +1,289 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/styles/farmer.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Agro Chain</h2>
+            </div>
+          
+            <ul class="nav-menu">
+                <li class="nav-item active" data-section="dashboard"><i>📊 </i>Dashboard</li>
+                <li class="nav-item" data-section="inventory"><i>📦 </i>Inventory</li>
+                <li class="nav-item" data-section="orders"><i>🛒 </i>Orders</li>
+                <li class="nav-item" data-section="payments"><i>💲</i> Payments</li>
+                <li class="nav-item" data-section="settings"><i>⚙ </i>Settings</li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="header">
+                    <h1 class="page-title">Dashboard</h1>
+                    <div class="date" id="currentDate">Loading...</div>
+                </div>
+                
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-title">Total Products</div>
+                        <div class="card-value" id="totalProducts">0</div>
+                        <div class="card-change" id="productsChange">Loading...</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Active Orders</div>
+                        <div class="card-value" id="activeOrders">0</div>
+                        <div class="card-change" id="ordersChange">Loading...</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Revenue (This Month)</div>
+                        <div class="card-value" id="totalRevenue">$0</div>
+                        <div class="card-change">Monthly total</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Low Stock Items</div>
+                        <div class="card-value" id="lowStockItems">0</div>
+                        <div class="card-change">Needs restock</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="section-header">
+                        <h2>Recent Orders</h2>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Products</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentOrdersTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">Loading recent orders...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+           
+            <!-- Inventory Section -->
+            <section id="inventory" class="section">
+                <div class="header">
+                    <h1 class="page-title">Inventory Management</h1>
+                    <button class="btn btn-primary" id="addProductBtn">Add New Product</button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Current Stock</th>
+                                <th>Min. Stock Level</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <tr>
+                                <td colspan="9" class="text-center">Loading inventory data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="form-container" id="productForm">
+                    <h2 id="formTitle">Add New Product</h2>
+                    <form id="addProductForm">
+                        <input type="hidden" id="productId">
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" id="productName" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Category</label>
+                            <select id="productCategory">
+                                <option value="Fruits">Fruits</option>
+                                <option value="Vegetables">Vegetables</option>
+                                <option value="Dairy">Dairy</option>
+                                <option value="Meat">Meat</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Price ($)</label>
+                            <input type="number" id="productPrice" step="0.01" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="productUnit">Unit</label>
+                            <select id="productUnit">
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="lb">Pound (lb)</option>
+                                <option value="dozen">Dozen</option>
+                                <option value="piece">Piece</option>
+                                <option value="L">Liter (L)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productStock">Current Stock</label>
+                            <input type="number" id="productStock" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="productMinStock">Minimum Stock Level</label>
+                            <input type="number" id="productMinStock" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Description</label>
+                            <textarea id="productDescription" rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Product</button>
+                        <button type="button" class="btn btn-danger" id="cancelProductBtn">Cancel</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Orders Section -->
+            <section id="orders" class="section">
+                <div class="header">
+                    <h1 class="page-title">Order Management</h1>
+                </div>
+            
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Order Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">Loading orders...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Receipt Modal -->
+            <div id="receiptModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">×</span>
+                    <h2>Receipt</h2>
+                    <p id="receiptDetails"></p>
+                </div>
+            </div>
+            
+            <!-- Payments Section -->
+            <section id="payments" class="section">
+                <div class="header">
+                    <h1 class="page-title">Payment Tracking</h1>
+                </div>
+                
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-title">Total Revenue</div>
+                        <div class="card-value" id="paymentsTotalRevenue">$0</div>
+                        <div class="card-change">This year</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Pending Payments</div>
+                        <div class="card-value" id="pendingPayments">$0</div>
+                        <div class="card-change" id="pendingPaymentsCount">0 orders</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Paid Today</div>
+                        <div class="card-value" id="todayPayments">$0</div>
+                        <div class="card-change" id="todayPaymentsCount">0 orders</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Method</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">Loading payments...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="section">
+                <div class="header">
+                    <h1 class="page-title">Account Settings</h1>
+                </div>
+                
+                <div class="form-container" style="display: block;">
+                    <h2>Farm Information</h2>
+                    <form id="farmSettingsForm">
+                        <div class="form-group">
+                            <label for="farmName">Farm Name</label>
+                            <input type="text" id="farmName" value="Green Valley Farm">
+                        </div>
+                        <div class="form-group">
+                            <label for="ownerName">Owner Name</label>
+                            <input type="text" id="ownerName" value="Jane Farmer">
+                        </div>
+                        <div class="form-group">
+                            <label for="farmAddress">Address</label>
+                            <textarea id="farmAddress" rows="3">123 Rural Road, Farmville, AB 12345</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Contact Email</label>
+                            <input type="email" id="contactEmail" value="jane@greenvalleyfarm.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPhone">Contact Phone</label>
+                            <input type="tel" id="contactPhone" value="(555) 123-4567">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Toast Notification -->
+            <div class="toast" id="toast"></div>
+        </div>
+    </div>
+
+    <script src="/scripts/farmer.js"></script>
+
+
+
+</body>
+</html>

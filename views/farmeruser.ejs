@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AgroChain - For Farmers</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="/styles/farmeruser.css">
+    </head>
+    <body>
+
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <a href="/index" class="logo">
+                <img src="https://i.ibb.co/6RYjdgBf/logo-3-off-1.png" alt="Logo" height="60" width="280">
+            </a>
+            
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+    
+            <div class="nav-links">
+                <a href="/index">Home</a>
+                <a href="/aboutus">About Us</a>
+                
+                <div class="dropdown">
+                    <div class="dropdown-toggle">Features</div>
+                    <div class="dropdown-menu">
+                    <a href="/feature1">Invoicing &amp; Payments</a>
+                    <a href="/feature2">Inventory Management</a>
+                    <a href="/feature3">Contract Management</a>
+                    <a href="/feature4">Delivery Tracking</a>
+                    </div>
+                </div>
+    
+                <div class="dropdown">
+                    <div class="dropdown-toggle">Users</div>
+                    <div class="dropdown-menu">
+                        <a href="/farmeruser">Farmers</a>
+                        <a href="/delaruser">Distributors</a>
+                        <a href="/retaileruser">Retailers</a>
+                    </div>
+                </div>
+    
+                <a href="tel:1300565005" class="phone-number">7416995503</a>
+                <div class="buttons">
+                    <button class="btn btn-signin"><a href="/login">Login</a></button>
+                    <button class="btn btn-demo">Request Demo</button>
+                </div>
+            </div>
+        </nav>
+
+<!-- Demo Request Popup Form -->
+<div id="demoRequestPopup" class="popup-container">
+    <div class="popup-content">
+        <span class="close-popup">×</span>
+        <div class="popup-header">
+            <img src="https://i.ibb.co/p6C5VK89/Agochain-logo.png" alt="AgroChain Logo" class="popup-logo">
+            <h2>Let's Connect</h2>
+            <p>5000+ Organisations Trust AgroChain to manage inventory, sites, and trucks better. Get in touch to know more.</p>
+        </div>
+        <form id="demoRequestForm">
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required="">
+            </div>
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" placeholder="name@website.com" required="">
+            </div>
+            <div class="form-group">
+                <label for="phone">Contact Number *</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 9999999999" required="">
+            </div>
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" rows="4" required=""></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+    <section class="hero farmer-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Smart farmers use AgroChain</h1>
+                <p>AgroChain is the best way to automate your on farm / off farm deliveries, payments, invoices, contracts and grain storage</p>
+                <a href="/login" class="btn-primary">Try for Free</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://agrichain.com/wp-content/uploads/2020/02/device_mock-up_2.png" alt="AgroChain dashboard on multiple devices">
+            </div>
+        </div>
+    </section>
+
+    <section class="welcome-section">
+        <div class="container">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h2>Welcome to Agricultural Market</h2>
+                    <p>Take control of your farming business with our comprehensive digital platform designed specifically for farmers.</p>
+                    <p>Our tools help you manage inventory, create contracts, schedule deliveries, and track payments - all in one place.</p>
+                  
+                </div>
+                <div class="welcome-image">
+                    <img src="https://agrichain.com/wp-content/uploads/2018/09/farmer1.png" alt="Farming image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Farmer Benefits &amp; Features</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-warehouse"></i>
+                    <h3>Stock Inventory Management</h3>
+                    <p>Easily track and manage your agricultural products with our intuitive inventory system. Add new products, update quantities, and receive notifications when stock is running low.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-contract"></i>
+                    <h3>Contract Creation &amp; Management</h3>
+                    <p>Create and manage contracts with dealers and retailers. Set terms, prices, and delivery schedules. Receive notifications when contracts are accepted or need attention.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Document Digitization</h3>
+                    <p>Convert paper documents to digital format for easy storage and retrieval. Access important documents anytime, anywhere from your dashboard.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-truck"></i>
+                    <h3>Delivery Scheduling</h3>
+                    <p>Plan and schedule product deliveries efficiently. Set pickup times, track delivery status, and receive notifications when deliveries are completed.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h3>Payment Tracking</h3>
+                    <p>Monitor all payment transactions. Get alerts for pending payments, view payment history, and generate financial reports for your records.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Sales Analytics</h3>
+                    <p>Gain insights into your sales performance. View trends, identify your best-selling products, and make data-driven decisions to improve your business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works For Farmers</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Register &amp; Create Profile</h3>
+                    <p>Sign up and create your farmer profile with details about your farm and products.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>List Your Products</h3>
+                    <p>Add your agricultural products to your inventory with details and pricing.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Connect With Buyers</h3>
+                    <p>Receive inquiries and orders from dealers interested in your products.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Manage Orders &amp; Deliveries</h3>
+                    <p>Accept orders, schedule deliveries, and track shipments in real-time.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>Get Paid</h3>
+                    <p>Receive payments directly through the platform with full transparency.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2>What Farmers Say About Us</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="quote">"AgroChain has transformed how I manage my farm business. I now spend less time on paperwork and more time on what I love - farming."</div>
+                    <div class="author">- Rajesh Kumar, Wheat Farmer</div>
+                </div>
+                <div class="testimonial">
+                    <div class="quote">"The direct connection with dealers has improved my profits by eliminating middlemen. The inventory tracking is excellent!"</div>
+                    <div class="author">- Sunita Patel, Organic Vegetable Grower</div>
+                </div>
+                <div class="testimonial">
+                    <div class="quote">"I love how easy it is to create and manage contracts. The payment tracking feature gives me peace of mind."</div>
+                    <div class="author">- Mahesh Singh, Rice Farmer</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Transform Your Farming Business?</h2>
+            <p>Join thousands of farmers who are already benefiting from AgroChain's platform.</p>
+            <a href="/register" class="btn-primary">Join as Farmer</a>
+        </div>
+    </section>
+    <script src="/scripts/farmeruser.js"></script>
+
+</body>
+</html>

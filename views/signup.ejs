@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroChain - Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+    }
+
+    .signup-container {
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .signup-image-section {
+      flex: 1;
+      background-image: url('https://images.unsplash.com/photo-1516211695757-600f5074ef3c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(40, 130, 70, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .overlay h2 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .overlay p {
+      font-size: 1.2rem;
+      max-width: 400px;
+    }
+
+    .signup-form-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      padding: 40px;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .signup-title {
+      color: #2c9f4e;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .signup-subtitle {
+      color: #667085;
+      margin-bottom: 30px;
+    }
+
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #344054;
+      font-weight: 500;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #98a2b3;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 15px 12px 40px;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #2c9f4e;
+      box-shadow: 0 0 0 4px rgba(44, 159, 78, 0.1);
+    }
+
+    .submit-button {
+      background-color: #2c9f4e;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+      background-color: #258d45;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      color: #667085;
+    }
+
+    .login-link a {
+      color: #2c9f4e;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      margin-bottom: 15px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      .signup-container {
+        flex-direction: column;
+      }
+
+      .signup-image-section {
+        min-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="signup-image-section">
+      <div class="overlay">
+        <h2>Welcome to AgroChain</h2>
+        <p>Connecting farmers, dealers, and retailers</p>
+      </div>
+    </div>
+    <div class="signup-form-section">
+      <div class="form-wrapper">
+        <div class="text-center">
+          <h1 class="signup-title">Create Account</h1>
+          <p class="signup-subtitle">Join the AgroChain ecosystem</p>
+        </div>
+
+        <% if (error) { %>
+          <div class="error-message"><%= error %></div>
+        <% } %>
+
+        <form id="signupForm" action="/signup" method="POST" class="signup-form">
+          <div class="grid">
+            <div>
+              <label for="firstName">First Name</label>
+              <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input 
+                  type="text" 
+                  id="firstName" 
+                  name="firstName" 
+                  required 
+                  minlength="2"
+                  pattern="[A-Za-z]+"
+                  title="First name should only contain letters"
+                  placeholder="First name"
+                  value="<%= oldInput.firstName || '' %>"
+                >
+              </div>
+            </div>
+            <div>
+              <label for="lastName">Last Name</label>
+              <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input  
+                  type="text" 
+                  id="lastName" 
+                  name="lastName" 
+                  required 
+                  minlength="2"
+                  pattern="[A-Za-z]+"
+                  title="Last name should only contain letters"
+                  placeholder="Last name"
+                  value="<%= oldInput.lastName || '' %>"
+                >
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="username">Username</label>
+            <div class="input-group">
+              <i class="fas fa-at"></i>
+              <input 
+                type="text" 
+                id="username" 
+                name="username" 
+                required 
+                minlength="4"
+                pattern="[A-Za-z0-9_]+"
+                title="Username can only contain letters, numbers, and underscores"
+                placeholder="Choose a username"
+                value="<%= oldInput.username || '' %>"
+              >
+            </div>
+          </div>
+
+          <div>
+            <label for="email">Email Address</label>
+            <div class="input-group">
+              <i class="fas fa-envelope"></i>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                placeholder="you@example.com"
+                value="<%= oldInput.email || '' %>"
+              >
+            </div>
+          </div>
+
+          <div class="grid">
+            <div>
+              <label for="password">Password</label>
+              <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  required
+                  minlength="8"
+                  placeholder="Create a strong password"
+                >
+              </div>
+              <p class="text-xs text-gray-500 mt-1">At least 8 characters long</p>
+            </div>
+            <div>
+              <label for="confirmPassword">Confirm Password</label>
+              <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  name="confirmPassword" 
+                  required
+                  minlength="8"
+                  placeholder="Confirm password"
+                >
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="phone">Phone Number</label>
+            <div class="input-group">
+              <i class="fas fa-phone"></i>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone" 
+                pattern="[0-9]{10}"
+                title="10 digit phone number"
+                required
+                placeholder="10 digit mobile number"
+                value="<%= oldInput.phone || '' %>"
+              >
+            </div>
+          </div>
+
+          <div>
+            <label for="aadhar">Aadhar Number</label>
+            <div class="input-group">
+              <i class="fas fa-id-card"></i>
+              <input 
+                type="text" 
+                id="aadhar" 
+                name="aadhar" 
+                pattern="[0-9]{12}"
+                title="12 digit Aadhar number"
+                required
+                placeholder="12 digit Aadhar number"
+                value="<%= oldInput.aadhar || '' %>"
+              >
+            </div>
+          </div>
+
+          <div>
+            <label for="address">Full Address</label>
+            <div class="input-group">
+              <i class="fas fa-home"></i>
+              <textarea 
+                id="address" 
+                name="address" 
+                required
+                rows="3"
+                placeholder="Enter your full address"
+              ><%= oldInput.address || '' %></textarea>
+            </div>
+          </div>
+
+          <div>
+            <label for="state">State</label>
+            <div class="input-group">
+              <i class="fas fa-map-marker-alt"></i>
+              <select 
+                id="state" 
+                name="state" 
+                required
+              >
+                <option value="">Select your state</option>
+                <% states.forEach(function(state) { %>
+                  <option value="<%= state %>" <%= (oldInput.state === state) ? 'selected' : '' %>><%= state %></option>
+                <% }); %>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="type">User Type</label>
+            <div class="input-group">
+              <i class="fas fa-user-tag"></i>
+              <select 
+                id="type" 
+                name="type" 
+                required
+              >
+                <option value="">Select your role</option>
+                <option value="farmer" <%= (oldInput.type === 'farmer') ? 'selected' : '' %>>Farmer</option>
+                <option value="dealer" <%= (oldInput.type === 'dealer') ? 'selected' : '' %>>Dealer</option>
+                <option value="retailer" <%= (oldInput.type === 'retailer') ? 'selected' : '' %>>Retailer</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-button">
+            Create Account
+          </button>
+        </form>
+
+        <div class="login-link">
+          <p>
+            Already have an account? 
+            <a href="/login">Login here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const passwordToggle = document.getElementById('togglePassword');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const signupForm = document.getElementById('signupForm');
+
+      // Password visibility toggle
+      if (passwordToggle) {
+        passwordToggle.addEventListener('click', () => {
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          passwordToggle.classList.toggle('fa-eye');
+          passwordToggle.classList.toggle('fa-eye-slash');
+        });
+      }
+
+      // Form validation
+      signupForm.addEventListener('submit', (event) => {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        const email = document.getElementById('email').value;
+
+        // Check password match
+        if (password !== confirmPassword) {
+          event.preventDefault();
+          alert('Passwords do not match');
+          return;
+        }
+
+        // Check password strength
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+          event.preventDefault();
+          alert('Password must be at least 8 characters long and include uppercase, lowercase, number, and special character');
+          return;
+        }
+
+        // Email validation
+        function isValidEmail(email) {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          return emailRegex.test(email);
+        }
+
+        if (!isValidEmail(email)) {
+          event.preventDefault();
+          alert('Invalid email format');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

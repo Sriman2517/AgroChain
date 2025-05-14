@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AgriChain - Dealer Dashboard</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        
+        <link rel="stylesheet" href="/styles/dealer.css">
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Dealer Portal</h2>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="active" data-section="dashboard-section">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li data-section="products-section">
+                        <i class="fas fa-seedling"></i>
+                        <span>Products</span>
+                    </li>
+                    <li data-section="orders-section">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </li>
+                    <li data-section="inventory-section">
+                        <i class="fas fa-boxes"></i>
+                        <span>Inventory</span>
+                    </li>
+                    <li data-section="transport-section">
+                        <i class="fas fa-truck"></i>
+                        <span>Transport</span>
+                    </li>
+                    <li data-section="analytics-section">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </li>
+                    <li data-section="settings-section">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </li>
+                </ul>
+            </div>
+    
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Header -->
+                <div class="header">
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Search products, orders, farmers...">
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                    <div class="header-right">
+                        <div class="notification-icon" id="notificationIcon">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                            <div class="notification-dropdown" id="notificationDropdown">
+                                <div class="notification-header">
+                                    <h4>Notifications</h4>
+                                    <button class="mark-all-read" id="markAllAsRead">Mark all as read</button>
+                                </div>
+                                <div class="notification-item">
+                                    <div style="display: flex; align-items: flex-start;">
+                                        <i class="fas fa-truck" style="color: var(--info); margin-right: 10px; margin-top: 2px;"></i>
+                                        <div>
+                                            <p style="margin-bottom: 5px;">Order #ORD-7830 is out for delivery</p>
+                                            <small style="color: var(--text-light);">2 hours ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div style="display: flex; align-items: flex-start;">
+                                        <i class="fas fa-seedling" style="color: var(--primary); margin-right: 10px; margin-top: 2px;"></i>
+                                        <div>
+                                            <p style="margin-bottom: 5px;">15 new products added</p>
+                                            <small style="color: var(--text-light);">6 hours ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div style="display: flex; align-items: flex-start;">
+                                        <i class="fas fa-exclamation-circle" style="color: var(--warning); margin-right: 10px; margin-top: 2px;"></i>
+                                        <div>
+                                            <p style="margin-bottom: 5px;">Price alert: Organic Wheat price dropped by 5%</p>
+                                            <small style="color: var(--text-light);">1 day ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="text-align: center; margin-top: 10px;">
+                                    <a href="#" style="color: var(--primary); text-decoration: none;">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-profile" id="userProfile">
+                            <i class="fas fa-user"></i>
+                            <span>John Dealer</span>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="#"><i class="fas fa-user-circle" style="margin-right: 10px;"></i> My Profile</a>
+                                <a href="#"><i class="fas fa-cog" style="margin-right: 10px;"></i> Settings</a>
+                                <a href="#"><i class="fas fa-question-circle" style="margin-right: 10px;"></i> Help</a>
+                                <a href="#"><i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Dashboard Content -->
+                <div class="content">
+                    <!-- Dashboard Section -->
+                    <div id="dashboard-section" class="active-section">
+                        <h2 class="page-title">Dashboard Overview</h2>
+                        
+                        <!-- Stats Cards -->
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="pendingOrdersCount">0</h3>
+                                    <p>Pending Orders</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="activeDeliveriesCount">0</h3>
+                                    <p>Active Deliveries</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="availableProductsCount">0</h3>
+                                    <p>Available Products</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="verifiedFarmersCount">0</h3>
+                                    <p>Verified Farmers</p>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!-- Recent Activity and Notifications -->
+                        <div class="grid-container">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Recent Orders</h3>
+                                    <a href="#" class="view-all" onclick="showSection('orders-section')">View All</a>
+                                </div>
+                                <div class="table-responsive">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentOrdersTableBody">
+                                            <tr>
+                                                <td colspan="5" class="text-center">Loading recent orders...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Notifications</h3>
+                                    <a href="#" class="view-all">View All</a>
+                                </div>
+                                <ul style="list-style: none;" id="notificationsList">
+                                    <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                        <div style="display: flex; align-items: flex-start;">
+                                            <i class="fas fa-truck" style="color: var(--info); margin-right: 10px; margin-top: 2px;"></i>
+                                            <div>
+                                                <p style="margin-bottom: 5px;">Order #ORD-7830 is out for delivery</p>
+                                                <small style="color: var(--text-light);">2 hours ago</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                        <div style="display: flex; align-items: flex-start;">
+                                            <i class="fas fa-seedling" style="color: var(--primary); margin-right: 10px; margin-top: 2px;"></i>
+                                            <div>
+                                                <p style="margin-bottom: 5px;">15 new products added</p>
+                                                <small style="color: var(--text-light);">6 hours ago</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li style="padding: 12px 0;">
+                                        <div style="display: flex; align-items: flex-start;">
+                                            <i class="fas fa-exclamation-circle" style="color: var(--warning); margin-right: 10px; margin-top: 2px;"></i>
+                                            <div>
+                                                <p style="margin-bottom: 5px;">Price alert: Organic Wheat price dropped by 5%</p>
+                                                <small style="color: var(--text-light);">1 day ago</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+    
+                        <!-- Featured Products (Wishlist) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Wishlist</h3>
+                                <a href="#" class="view-all" onclick="showSection('products-section')">View All Products</a>
+                            </div>
+                            <div id="wishlist-products" class="product-grid" style="margin-top: 20px;">
+                                <!-- Wishlist products will be dynamically loaded here -->
+                                <div class="empty-state" id="empty-wishlist">
+                                    <i class="fas fa-heart"></i>
+                                    <h3>Your wishlist is empty</h3>
+                                    <p>Like products to add them to your wishlist</p>
+                                    <button class="btn btn-primary" onclick="showSection('products-section')">Browse Products</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Products Section -->
+                    
+                    <div id="products-section" class="products-section">
+        <h2 class="page-title">Browse Products</h2>
+        
+        <!-- Filters -->
+        <div class="filter-container">
+            <h3 class="filter-title">Filters</h3>
+            <div class="filter-row">
+                <div class="filter-item">
+                    <label for="product-type">Product Type</label>
+                    <select id="product-type">
+                        <option value="">All Types</option>
+                        <option value="grains">Grains</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="dairy">Dairy</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="location">Location</label>
+                    <select id="location">
+                        <option value="">All Locations</option>
+                        <option value="north">Northern Region</option>
+                        <option value="south">Southern Region</option>
+                        <option value="east">Eastern Region</option>
+                        <option value="west">Western Region</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="price-range">Price Range</label>
+                    <select id="price-range">
+                        <option value="">Any Price</option>
+                        <option value="low">$0 - $200</option>
+                        <option value="medium">$200 - $500</option>
+                        <option value="high">$500+</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="quality">Quality Grade</label>
+                    <select id="quality">
+                        <option value="">All Grades</option>
+                        <option value="premium">Premium</option>
+                        <option value="organic">Organic</option>
+                        <option value="standard">Standard</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-outline" onclick="resetFilters()">Reset</button>
+                <button class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+            </div>
+        </div>
+        
+        <!-- Product Grid -->
+        <div id="all-products" class="product-grid">
+            <!-- Products will be dynamically loaded here -->
+            <div class="loader" id="products-loader"></div>
+        </div>
+    </div>
+    
+                    <!-- Orders Section -->
+                    <div id="orders-section" class="orders-section">
+                        <h2 class="page-title">Order Management</h2>
+                        
+                        <div class="tabs">
+                            <div class="tab active" data-tab="all-orders">All Orders</div>
+                            <div class="tab" data-tab="pending-orders">Pending</div>
+                            <div class="tab" data-tab="processing-orders">Processing</div>
+                            <div class="tab" data-tab="shipped-orders">Shipped</div>
+                            <div class="tab" data-tab="delivered-orders">Delivered</div>
+                        </div>
+                        
+                        <div class="filter-container">
+                            <div class="filter-row">
+                                <div class="filter-item">
+                                    <label for="order-date">Date Range</label>
+                                    <input type="date" id="order-date">
+                                </div>
+                                <div class="filter-item">
+                                    <label for="order-search">Search</label>
+                                    <input type="text" id="order-search" placeholder="Order ID, Product...">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content active" id="all-orders">
+                            <div class="card">
+                                <div class="table-responsive">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>Products</th>
+                                                <th>Total</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="orders-table-body">
+                                            <!-- Orders will be dynamically loaded here -->
+                                            <tr>
+                                                <td colspan="6" class="text-center">Loading orders...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Inventory Section -->
+                    <div id="inventory-section" class="inventory-section">
+                        <h2 class="page-title">Inventory Management</h2>
+                        
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="inventoryCount">0</h3>
+                                    <p>Total Products</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="lowStockCount">0</h3>
+                                    <p>Low Stock Items</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Inventory Items</h3>
+                                <button class="btn btn-primary" onclick="openAddInventoryModal()">Add New Item</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Product Name</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Min Stock</th>
+                                            <th>Status</th>
+                                            <th>Last Updated</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inventory-table-body">
+                                        <!-- Inventory items will be dynamically loaded here -->
+                                        <tr>
+                                            <td colspan="9" class="text-center">Loading inventory items...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Transport Section -->
+                    <div id="transport-section" class="transport-section">
+                        <h2 class="page-title">Transport Management</h2>
+                        
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="availableVehiclesCount">0</h3>
+                                    <p>Available Vehicles</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-route"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="activeRoutesCount">0</h3>
+                                    <p>Active Routes</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="scheduledPickupsCount">0</h3>
+                                    <p>Scheduled Pickups</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="pendingDeliveriesCount">0</h3>
+                                    <p>Pending Deliveries</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Vehicle Fleet</h3>
+                                <button class="btn btn-primary" onclick="openAddVehicleModal()">Add Vehicle</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Vehicle ID</th>
+                                            <th>Type</th>
+                                            <th>Capacity</th>
+                                            <th>Driver</th>
+                                            <th>Status</th>
+                                            <th>Last Maintenance</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="vehicles-table-body">
+                                        <!-- Vehicles will be dynamically loaded here -->
+                                        <tr>
+                                            <td colspan="7" class="text-center">Loading vehicles...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Analytics Section -->
+                    <div id="analytics-section" class="analytics-section">
+                        <h2 class="page-title">Business Analytics</h2>
+                        
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="monthlyRevenue">$0</h3>
+                                    <p>Monthly Revenue</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="growthRate">0%</h3>
+                                    <p>Growth Rate</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-shopping-basket"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="monthlyOrders">0</h3>
+                                    <p>Orders This Month</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3 id="newCustomers">0</h3>
+                                    <p>New Customers</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-container">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Revenue Trends</h3>
+                                    <select id="revenue-period">
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly" selected="">Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>
+                                </div>
+                                <div class="chart-container">
+                                    <div class="chart-placeholder">
+                                        <p>Revenue Chart - Monthly data visualization would appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Top Products</h3>
+                                </div>
+                                <div class="chart-container">
+                                    <div class="chart-placeholder">
+                                        <p>Top Products Chart would appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Settings Section -->
+                    <div id="settings-section" class="settings-section">
+                        <h2 class="page-title">Account Settings</h2>
+                        
+                        <div class="tabs">
+                            <div class="tab active" data-tab="profile-settings">Profile</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="profile-settings">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Personal Information</h3>
+                                </div>
+                                <div style="padding: 20px;">
+                                    <form id="profile-form">
+                                        <div class="form-group">
+                                            <label for="full-name">Full Name</label>
+                                            <input type="text" id="full-name" value="John Dealer">
+                                        </div>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                                            <div class="form-group" style="flex: 1; min-width: 250px;">
+                                                <label for="email">Email Address</label>
+                                                <input type="email" id="email" value="john@agrichain.com">
+                                            </div>
+                                            <div class="form-group" style="flex: 1; min-width: 250px;">
+                                                <label for="phone">Phone Number</label>
+                                                <input type="tel" id="phone" value="+1 (555) 123-4567">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Address</label>
+                                            <textarea id="address" rows="3">123 Business Ave, Suite 456, Agriville, AG 12345</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Order Modal -->
+        <div class="modal-overlay" id="orderModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Place Order</h2>
+                    <button class="close-btn" onclick="closeOrderModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="product-name">Product</label>
+                        <input type="text" id="product-name" readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="unit-price">Unit Price</label>
+                        <input type="text" id="unit-price" readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity (kg)</label>
+                        <input type="number" id="quantity" placeholder="Enter quantity" min="500" value="500" required="">
+                        <small>Minimum order: <span id="min-order">500</span>kg</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-date">Requested Delivery Date</label>
+                        <input type="date" id="delivery-date" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-address">Delivery Address</label>
+                        <textarea id="delivery-address" placeholder="Enter delivery address" required=""></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="special-instructions">Special Instructions (Optional)</label>
+                        <textarea id="special-instructions" placeholder="Any special handling or delivery instructions"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeOrderModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="placeOrder()">Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Order Details Modal -->
+        <div class="modal-overlay" id="orderDetailsModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Order Details</h2>
+                    <button class="close-btn" onclick="closeOrderDetailsModal()">×</button>
+                </div>
+                <div class="modal-body" id="orderDetailsContent">
+                    <!-- Content will be dynamically populated -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeOrderDetailsModal()">Close</button>
+                    <button class="btn btn-primary" onclick="printOrderDetails()">Print</button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Vehicle Details Modal -->
+        <div class="modal-overlay" id="vehicleDetailsModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Vehicle Details</h2>
+                    <button class="close-btn" onclick="closeVehicleDetailsModal()">×</button>
+                </div>
+                <div class="modal-body" id="vehicleDetailsContent">
+                    <!-- Content will be dynamically populated -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeVehicleDetailsModal()">Close</button>
+                    <button class="btn btn-primary" onclick="editVehicle()">Edit</button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Inventory Modal -->
+        <div class="modal-overlay" id="inventoryModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="inventoryModalTitle">Add Inventory Item</h2>
+                    <button class="close-btn" onclick="closeInventoryModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="inventoryForm">
+                        <input type="hidden" id="inventory-id">
+                        <div class="form-group">
+                            <label for="product-name-input">Product Name</label>
+                            <input type="text" id="product-name-input" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="category-input">Category</label>
+                            <select id="category-input" required="">
+                                <option value="Grains">Grains</option>
+                                <option value="Fruits">Fruits</option>
+                                <option value="Vegetables">Vegetables</option>
+                                <option value="Dairy">Dairy</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="price-input">Price ($)</label>
+                            <input type="number" id="price-input" step="0.01" min="0.01" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="unit-input">Unit</label>
+                            <select id="unit-input" required="">
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="lb">Pound (lb)</option>
+                                <option value="dozen">Dozen</option>
+                                <option value="piece">Piece</option>
+                                <option value="jar">Jar</option>
+                                <option value="L">Liter (L)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity-input">Quantity</label>
+                            <input type="number" id="quantity-input" min="0" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="min-stock-input">Minimum Stock Level</label>
+                            <input type="number" id="min-stock-input" min="0" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="description-input">Description</label>
+                            <textarea id="description-input" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeInventoryModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveInventoryItem()">Save Item</button>
+                </div>
+            </div>
+        </div>
+    
+        <script src="/scripts/dealer.js"></script>
+    </body>
+</html>

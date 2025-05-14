@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroChain - Contact Submissions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="bg-green-600 text-white p-4 rounded-lg shadow-md mb-6 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Contact Form Submissions</h1>
+            <a href="/admin" class="bg-white text-green-600 px-4 py-2 rounded hover:bg-gray-100 transition">
+                Back to Dashboard
+            </a>
+        </header>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-xl font-semibold">All Submissions</h2>
+                    <span id="unread-count" class="bg-red-100 text-red-800 px-3 py-1 rounded-full">Loading...</span>
+                </div>
+                <div class="flex gap-2">
+                    <button id="refresh-btn" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Refresh
+                    </button>
+                    <button id="mark-all-read-btn" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">
+                        Mark All as Read
+                    </button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="py-2 px-4 text-left">Status</th>
+                            <th class="py-2 px-4 text-left">Name</th>
+                            <th class="py-2 px-4 text-left">Email</th>
+                            <th class="py-2 px-4 text-left">Message</th>
+                            <th class="py-2 px-4 text-left">Date</th>
+                            <th class="py-2 px-4 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissions-table">
+                        <tr>
+                            <td colspan="6" class="py-4 text-center text-gray-500">Loading submissions...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Submission Details Modal -->
+        <div id="submission-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Contact Submission Details</h3>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="submission-details" class="space-y-4">
+                    <!-- Details will be populated by JavaScript -->
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button id="mark-read-btn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition mr-2">
+                        Mark as Read
+                    </button>
+                    <button id="close-details-btn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const submissionsTable = document.getElementById('submissions-table');
+            const unreadCountElement = document.getElementById('unread-count');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const markAllReadBtn = document.getElementById('mark-all-read-btn');
+            const modal = document.getElementById('submission-modal');
+            const closeModal = document.getElementById('close-modal');
+            const closeDetailsBtn = document.getElementById('close-details-btn');
+            const submissionDetails = document.getElementById('submission-details');
+            const markReadBtn = document.getElementById('mark-read-btn');
+            
+            let currentSubmissionId = null;
+            
+            // Fetch contact submissions
+            fetchSubmissions();
+            fetchUnreadCount();
+            
+            // Set up event listeners
+            refreshBtn.addEventListener('click', () => {
+                fetchSubmissions();
+                fetchUnreadCount();
+            });
+            
+            markAllReadBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to mark all submissions as read?')) {
+                    markAllAsRead();
+                }
+            });
+            
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            closeDetailsBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            markReadBtn.addEventListener('click', () => {
+                if (currentSubmissionId) {
+                    markAsRead(currentSubmissionId);
+                }
+            });
+            
+            // Functions
+            function fetchSubmissions() {
+                fetch('/api/contact/submissions')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            submissionsTable.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-gray-500">No submissions yet</td></tr>';
+                            return;
+                        }
+                        
+                        submissionsTable.innerHTML = '';
+                        
+                        data.forEach(submission => {
+                            const submissionDate = new Date(submission.submitted_at);
+                            const formattedDate = submissionDate.toLocaleString();
+                            
+                            const row = document.createElement('tr');
+                            row.className = submission.is_read === 0 ? 'bg-blue-50' : '';
+                            row.innerHTML = `
+                                <td class="py-2 px-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${submission.is_read === 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
+                                        ${submission.is_read === 0 ? 'Unread' : 'Read'}
+                                    </span>
+                                </td>
+                                <td class="py-2 px-4">${submission.name}</td>
+                                <td class="py-2 px-4">${submission.email}</td>
+                                <td class="py-2 px-4">${submission.message.substring(0, 50)}${submission.message.length > 50 ? '...' : ''}</td>
+                                <td class="py-2 px-4">${formattedDate}</td>
+                                <td class="py-2 px-4">
+                                    <button class="text-blue-600 hover:text-blue-800 text-sm view-details" data-id="${submission.id}">
+                                        View Details
+                                    </button>
+                                </td>
+                            `;
+                            
+                            submissionsTable.appendChild(row);
+                        });
+                        
+                        // Add event listeners to view details buttons
+                        document.querySelectorAll('.view-details').forEach(button => {
+                            button.addEventListener('click', () => {
+                                const submissionId = button.getAttribute('data-id');
+                                viewSubmissionDetails(submissionId);
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching submissions:', error);
+                        submissionsTable.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-red-500">Error loading submissions</td></tr>';
+                    });
+            }
+            
+            function fetchUnreadCount() {
+                fetch('/api/contact/submissions/unread')
+                    .then(response => response.json())
+                    .then(data => {
+                        unreadCountElement.textContent = `${data.unreadCount} Unread`;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching unread count:', error);
+                        unreadCountElement.textContent = 'Error';
+                    });
+            }
+            
+            function viewSubmissionDetails(id) {
+                fetch(`/api/contact/submissions/${id}`)
+                    .then(response => response.json())
+                    .then(submission => {
+                        currentSubmissionId = submission.id;
+                        
+                        const submissionDate = new Date(submission.submitted_at);
+                        const formattedDate = submissionDate.toLocaleString();
+                        
+                        submissionDetails.innerHTML = `
+                            <div>
+                                <span class="text-gray-600 block">Name:</span>
+                                <span class="font-medium">${submission.name}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 block">Email:</span>
+                                <span class="font-medium">${submission.email}</span>
+                            </div>
+                            ${submission.phone ? `
+                            <div>
+                                <span class="text-gray-600 block">Phone:</span>
+                                <span class="font-medium">${submission.phone}</span>
+                            </div>
+                            ` : ''}
+                            <div>
+                                <span class="text-gray-600 block">Message:</span>
+                                <p class="mt-1 p-3 bg-gray-50 rounded">${submission.message}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 block">Submitted:</span>
+                                <span class="font-medium">${formattedDate}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 block">Status:</span>
+                                <span class="font-medium ${submission.is_read === 0 ? 'text-red-600' : 'text-green-600'}">
+                                    ${submission.is_read === 0 ? 'Unread' : 'Read'}
+                                </span>
+                            </div>
+                        `;
+                        
+                        // Show or hide mark as read button based on current status
+                        if (submission.is_read === 1) {
+                            markReadBtn.classList.add('hidden');
+                        } else {
+                            markReadBtn.classList.remove('hidden');
+                        }
+                        
+                        modal.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching submission details:', error);
+                        alert('Error loading submission details');
+                    });
+            }
+            
+            function markAsRead(id) {
+                fetch(`/api/contact/submissions/${id}/read`, {
+                    method: 'PUT'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update UI
+                            markReadBtn.classList.add('hidden');
+                            const statusElement = submissionDetails.querySelector('span:last-child');
+                            statusElement.textContent = 'Read';
+                            statusElement.classList.remove('text-red-600');
+                            statusElement.classList.add('text-green-600');
+                            
+                            // Refresh submissions and unread count
+                            fetchSubmissions();
+                            fetchUnreadCount();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error marking as read:', error);
+                        alert('Error updating submission status');
+                    });
+            }
+            
+            function markAllAsRead() {
+                fetch('/api/contact/submissions/mark-all-read', {
+                    method: 'PUT'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Refresh submissions and unread count
+                            fetchSubmissions();
+                            fetchUnreadCount();
+                            alert('All submissions marked as read');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error marking all as read:', error);
+                        alert('Error updating submission statuses');
+                    });
+            }
+        });
+    </script>
+</body>
+</html>

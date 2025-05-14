@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroChain - Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://res.cloudinary.com/cognitives-s3/image/upload/c_fill,dpr_auto,f_auto,fl_lossy,g_auto,h_515,q_100/v1/cog-aap/n/451/2025/Feb/09/G6EKjIj3o7tufnm1uWuU.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-container {
+      background-color: white;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      overflow: hidden; /* Prevents extra space inside the div */
+    }
+    .agrochain-header {
+      background-color: #2D9C3F;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 20px 0;
+      width: 100%;
+    }
+    .login-content {
+      padding: 25px;
+    }
+    .login-title {
+      color: #2D9C3F;
+      font-size: 25px;
+      font-weight: 600;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #2D9C3F;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #2D9C3F;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .login-btn:hover {
+      background-color: #267F33;
+    }
+    .signup-link {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+    .signup-link a {
+      color: #2D9C3F;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+    .error-message {
+      color: #e74c3c;
+      margin-bottom: 15px;
+      text-align: left;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="agrochain-header">
+      AGROCHAIN
+    </div>
+    <div class="login-content">
+      <div class="login-title">Login</div>
+      <p style="text-align: left; margin-bottom: 20px;">Enter your details below to continue.</p>
+      <% if (error) { %>
+        <div class="error-message"><%= error %></div>
+      <% } %>
+      <form action="/login" method="POST">
+        <div class="form-group">
+          <label for="email" style="color: #2D9C3F;">Email *</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="password" style="color: #2D9C3F;">Password *</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="login-btn">LOGIN</button>
+      </form>
+      <div class="signup-link">
+        New User? <a href="/signup">Sign Up</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

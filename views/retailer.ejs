@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AgroChain - Retailer Dashboard</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="/styles/retailer.css">
+        
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Retailer Portal</h2>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="active" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li data-page="purchase-orders">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Purchase Orders</span>
+                    </li>
+                    <li data-page="inventory">
+                        <i class="fas fa-box"></i>
+                        <span>Inventory</span>
+                    </li>
+                    <li data-page="distributors">
+                        <i class="fas fa-users"></i>
+                        <span>Distributors</span>
+                    </li>
+                    <li data-page="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </li>
+                </ul>
+            </div>
+    
+            <div class="main-content">
+                <!-- Top Bar -->
+                <div class="top-bar">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Search products, orders, distributors...">
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                    <div class="user-info">
+                        <div class="notification-icon" id="notification-icon">
+                            <i class="fas fa-bell"></i>
+                            <div class="notification-badge" id="notification-badge">3</div>
+                            
+                            <!-- Notification Panel -->
+                            <div class="notification-panel" id="notification-panel">
+                                <div class="notification-panel-header">
+                                    <h3>Notifications</h3>
+                                    <button class="close-btn" onclick="toggleNotificationPanel()">×</button>
+                                </div>
+                                <div class="notification-panel-body">
+                                    <div class="notification-item">
+                                        <div class="notification-icon-small blue-bg">
+                                            <i class="fas fa-truck"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>New distributor "AgriMove" registered in your area</p>
+                                            <span class="notification-time">2 hours ago</span>
+                                        </div>
+                                    </div>
+                                    <div class="notification-item">
+                                        <div class="notification-icon-small green-bg">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>10 new wheat suppliers added to the marketplace</p>
+                                            <span class="notification-time">5 hours ago</span>
+                                        </div>
+                                    </div>
+                                    <div class="notification-item">
+                                        <div class="notification-icon-small" style="background-color: rgba(255, 152, 0, 0.1); color: #ff9800;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <p>Price alert: Organic Rice price dropped by 8%</p>
+                                            <span class="notification-time">1 day ago</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="notification-panel-footer">
+                                    <a href="#" onclick="markAllAsRead(); return false;">Mark all as read</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <span id="user-name">John Retailer</span>
+                            <i class="fas fa-chevron-down"></i>
+                            <div class="dropdown-content" id="user-dropdown">
+                                <a href="#" class="dropdown-item">Profile</a>
+                                <a href="#" class="dropdown-item">Account Settings</a>
+                                <a href="#" class="dropdown-item">Help &amp; Support</a>
+                                <a href="#" class="dropdown-item">Log Out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Dashboard Section -->
+                <div class="page-section active" id="dashboard-page">
+                    <h1 class="dashboard-title">Dashboard Overview</h1>
+    
+                    <div class="stats-container">
+                        <div class="stat-card" data-target="purchase-orders">
+                            <div class="stat-icon green-bg">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="active-orders-count">0</h3>
+                                <p>Active Orders</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" data-target="inventory">
+                            <div class="stat-icon blue-bg">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="products-count">0</h3>
+                                <p>Products in Stock</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" data-target="distributors">
+                            <div class="stat-icon purple-bg">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="distributors-count">0</h3>
+                                <p>Distributors</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" data-target="purchase-orders">
+                            <div class="stat-icon amber-bg">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="pending-orders-count">0</h3>
+                                <p>Pending Orders</p>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <h2>Filter Distributors</h2>
+                        </div>
+                        <div class="filter-options">
+                            <select class="filter-select" id="crop-filter">
+                                <option value="">Select Crop Type</option>
+                                <option value="grains">Grains</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <select class="filter-select" id="location-filter">
+                                <option value="">Select Location</option>
+                                <option value="1">Dealer #1</option>
+                                <option value="2">Dealer #2</option>
+                                <option value="3">Dealer #3</option>
+                            </select>
+                            <select class="filter-select" id="capacity-filter">
+                                <option value="">Quantity Available</option>
+                                <option value="small">Small (&lt; 100)</option>
+                                <option value="medium">Medium (100 - 500)</option>
+                                <option value="large">Large (&gt; 500)</option>
+                            </select>
+                            <button class="filter-button" id="apply-filters">Apply Filters</button>
+                            <button class="filter-button" style="background-color: #666;" id="reset-filters">Reset</button>
+                        </div>
+                    </div>
+    
+                    <div class="section-container">
+                        <div class="section distributors-section">
+                            <div class="section-header">
+                                <h2 class="section-title">Available Distributors</h2>
+                                <a href="#" class="view-all" id="view-all-distributors">View All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Distributor ID</th>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dealer-inventory-tbody">
+                                        <tr>
+                                            <td colspan="6" class="loading-spinner">
+                                                <div class="spinner"></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+    
+                        <div class="section notifications-section">
+                            <div class="section-header">
+                                <h2 class="section-title">Notifications</h2>
+                                <a href="#" class="view-all">View All</a>
+                            </div>
+                            <div class="notification-list">
+                                <div class="notification-item">
+                                    <div class="notification-icon-small blue-bg">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>New distributor "AgriMove" registered in your area</p>
+                                        <span class="notification-time">2 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-icon-small green-bg">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>10 new wheat suppliers added to the marketplace</p>
+                                        <span class="notification-time">5 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-icon-small" style="background-color: rgba(255, 152, 0, 0.1); color: #ff9800;">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <p>Price alert: Organic Rice price dropped by 8%</p>
+                                        <span class="notification-time">1 day ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Distributors Section -->
+                <div class="page-section" id="distributors-page">
+                    <h1 class="dashboard-title">Distributors Directory</h1>
+                    
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <h2>Find Distributors</h2>
+                        </div>
+                        <div class="filter-options">
+                            <select class="filter-select" id="dist-crop-filter">
+                                <option value="">Select Product Type</option>
+                                <option value="grains">Grains</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <select class="filter-select" id="dist-location-filter">
+                                <option value="">Select Dealer</option>
+                                <option value="1">Dealer #1</option>
+                                <option value="2">Dealer #2</option>
+                                <option value="3">Dealer #3</option>
+                            </select>
+                            <select class="filter-select" id="dist-price-filter">
+                                <option value="">Price Range</option>
+                                <option value="low">Low (&lt; $5)</option>
+                                <option value="medium">Medium ($5 - $10)</option>
+                                <option value="high">High (&gt; $10)</option>
+                            </select>
+                            <button class="filter-button" id="dist-apply-filters">Apply Filters</button>
+                            <button class="filter-button" style="background-color: #666;" id="dist-reset-filters">Reset</button>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">All Distributors</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Dealer ID</th>
+                                        <th>Product Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="all-dealer-inventory-tbody">
+                                    <tr>
+                                        <td colspan="7" class="loading-spinner">
+                                            <div class="spinner"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Purchase Orders Section -->
+                <div class="page-section" id="purchase-orders-page">
+                    <h1 class="dashboard-title">Purchase Orders</h1>
+                    
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <h2>Filter Orders</h2>
+                        </div>
+                        <div class="filter-options">
+                            <select class="filter-select" id="order-status-filter">
+                                <option value="">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="in-transit">In Transit</option>
+                                <option value="delivered">Delivered</option>
+                            </select>
+                            <input type="date" class="filter-select" id="order-date-filter">
+                            <input type="text" class="filter-select" id="order-search-filter" placeholder="Search by ID or product">
+                            <button class="filter-button" id="orders-apply-filters">Apply Filters</button>
+                            <button class="filter-button" style="background-color: #666;" id="orders-reset-filters">Reset</button>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Order Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-table-body">
+                                    <tr>
+                                        <td colspan="7" class="loading-spinner">
+                                            <div class="spinner"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Inventory Section -->
+                <div class="page-section" id="inventory-page">
+                    <h1 class="dashboard-title">Inventory Management</h1>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon green-bg">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="total-inventory-count">0</h3>
+                                <p>Total Products</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon amber-bg">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="low-stock-count">0</h3>
+                                <p>Low Stock Items</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Inventory Items</h2>
+                            <button class="filter-button" id="add-inventory-btn">Add New Item</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Min Stock</th>
+                                        <th>Status</th>
+                                        <th>Last Updated</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table-body">
+                                    <tr>
+                                        <td colspan="8" class="loading-spinner">
+                                            <div class="spinner"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Settings Section -->
+                <div class="page-section" id="settings-page">
+                    <h1 class="dashboard-title">Account Settings</h1>
+                    
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Profile Information</h2>
+                        </div>
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label for="full-name">Full Name</label>
+                                <input type="text" id="full-name" value="John Retailer">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" value="john@retailer.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" value="+1 (555) 123-4567">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Business Address</label>
+                                <textarea id="address" rows="3">123 Retail Street, City, State 12345</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+                    
+                    <div class="section" style="margin-top: 20px;">
+                        <div class="section-header">
+                            <h2 class="section-title">Notification Preferences</h2>
+                        </div>
+                        <form id="notification-form">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="email-notifications" checked=""> 
+                                    Receive email notifications
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="sms-notifications"> 
+                                    Receive SMS notifications
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="price-alerts" checked=""> 
+                                    Price change alerts
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="new-distributor-alerts" checked=""> 
+                                    New distributor alerts
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Preferences</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Order Modal -->
+        <div class="modal-overlay" id="orderModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Place Order</h2>
+                    <button class="close-btn" onclick="closeOrderModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="product-name">Product</label>
+                        <input type="text" id="product-name" readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="unit-price">Unit Price</label>
+                        <input type="text" id="unit-price" readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" placeholder="Enter quantity" min="1" value="1" required="">
+                        <small>Available: <span id="available-quantity">0</span></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-date">Requested Delivery Date</label>
+                        <input type="date" id="delivery-date" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-address">Delivery Address</label>
+                        <textarea id="delivery-address" placeholder="Enter delivery address" required=""></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="special-instructions">Special Instructions (Optional)</label>
+                        <textarea id="special-instructions" placeholder="Any special handling or delivery instructions"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeOrderModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="placeOrder()">Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Add Inventory Modal -->
+        <div class="modal-overlay" id="addInventoryModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Add Inventory Item</h2>
+                    <button class="close-btn" onclick="closeAddInventoryModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inv-product-name">Product Name</label>
+                        <input type="text" id="inv-product-name" placeholder="Enter product name" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-category">Category</label>
+                        <select id="inv-category" required="">
+                            <option value="">Select Category</option>
+                            <option value="Grains">Grains</option>
+                            <option value="Fruits">Fruits</option>
+                            <option value="Vegetables">Vegetables</option>
+                            <option value="Dairy">Dairy</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-price">Price</label>
+                        <input type="number" id="inv-price" placeholder="Enter price" step="0.01" min="0" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-quantity">Quantity</label>
+                        <input type="number" id="inv-quantity" placeholder="Enter quantity" min="0" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-unit">Unit</label>
+                        <select id="inv-unit" required="">
+                            <option value="">Select Unit</option>
+                            <option value="kg">Kilogram (kg)</option>
+                            <option value="g">Gram (g)</option>
+                            <option value="L">Liter (L)</option>
+                            <option value="ml">Milliliter (ml)</option>
+                            <option value="pcs">Pieces (pcs)</option>
+                            <option value="box">Box</option>
+                            <option value="bag">Bag</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-min-stock">Minimum Stock Level</label>
+                        <input type="number" id="inv-min-stock" placeholder="Enter minimum stock level" min="0" required="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline" onclick="closeAddInventoryModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addInventoryItem()">Add Item</button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Toast notification -->
+        <div class="toast" id="toast"></div>
+    
+        <!-- JavaScript -->
+        <script src="/scripts/retailer.js"></script>
+    
+    </body>
+    
+</html>
+

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroChain - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="bg-green-600 text-white p-4 rounded-lg shadow-md mb-6">
+            <h1 class="text-3xl font-bold">AgroChain Admin Dashboard</h1>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- User Management Card -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">User Management</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span>Farmers</span>
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full"><%= counts.farmerCount %></span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Dealers</span>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full"><%= counts.dealerCount %></span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Retailers</span>
+                        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full"><%= counts.retailerCount %></span>
+                    </div>
+                    <button class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition">
+                        Verify New Users
+                    </button>
+                </div>
+            </div>
+
+            <!-- Transaction Monitoring Card -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Transaction Overview</h2>
+                <canvas id="transactionChart"></canvas>
+                <div class="mt-4 grid grid-cols-2 gap-2 text-center">
+                    <div>
+                        <span class="block text-gray-600">Total Transactions</span>
+                        <span class="font-bold text-lg">1,245</span>
+                    </div>
+                    <div>
+                        <span class="block text-gray-600">Total Value</span>
+                        <span class="font-bold text-lg">₹42,56,890</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dispute Resolution Card -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Dispute Management</h2>
+                <div class="space-y-4">
+                    <div class="bg-yellow-50 p-3 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">Pending Disputes</span>
+                            <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full">7</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1">Requires immediate attention</p>
+                    </div>
+                    <button class="w-full bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition">
+                        Resolve Disputes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form Submissions -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">Contact Form Submissions</h2>
+                <span id="unread-count" class="bg-red-100 text-red-800 px-3 py-1 rounded-full">Loading...</span>
+            </div>
+            <div id="contact-submissions" class="divide-y divide-gray-200">
+                <div class="py-3 text-center text-gray-500">
+                    Loading submissions...
+                </div>
+            </div>
+            <button id="view-all-btn" class="w-full bg-green-500 text-white py-2 rounded mt-4 hover:bg-green-600 transition">
+                View All Submissions
+            </button>
+        </div>
+
+        <!-- Submission Details Modal -->
+        <div id="submission-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Contact Submission Details</h3>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="submission-details" class="space-y-4">
+                    <!-- Details will be populated by JavaScript -->
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button id="mark-read-btn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition mr-2">
+                        Mark as Read
+                    </button>
+                    <button id="close-details-btn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Log -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+            <h2 class="text-xl font-semibold mb-4">Recent Activity Log</h2>
+            <div class="divide-y divide-gray-200">
+                <% if (recentUsers && recentUsers.length > 0) { %>
+                    <% recentUsers.forEach(user => { %>
+                        <div class="py-3">
+                            <span class="font-medium">New <%= user.type.charAt(0).toUpperCase() + user.type.slice(1) %> Registration</span>
+                            <span class="text-gray-500 text-sm block"><%= user.type.charAt(0).toUpperCase() %>-<%= user.id %> - <%= user.firstName %> <%= user.lastName %></span>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="py-3">
+                        <span class="text-gray-500">No recent activity</span>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Transaction Chart
+        const ctx = document.getElementById('transactionChart').getContext('2d');
+        const transactionData = <%- JSON.stringify(transactionData) %>;
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: transactionData.labels,
+                datasets: [{
+                    label: 'Monthly Transactions',
+                    data: transactionData.values,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Contact Submissions Handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const submissionsContainer = document.getElementById('contact-submissions');
+            const unreadCountElement = document.getElementById('unread-count');
+            const viewAllBtn = document.getElementById('view-all-btn');
+            const modal = document.getElementById('submission-modal');
+            const closeModal = document.getElementById('close-modal');
+            const closeDetailsBtn = document.getElementById('close-details-btn');
+            const submissionDetails = document.getElementById('submission-details');
+            const markReadBtn = document.getElementById('mark-read-btn');
+            
+            let currentSubmissionId = null;
+            
+            // Fetch contact submissions
+            fetchSubmissions();
+            fetchUnreadCount();
+            
+            // Set up event listeners
+            viewAllBtn.addEventListener('click', () => {
+                window.location.href = '/admin/contact-submissions';
+            });
+            
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            closeDetailsBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            markReadBtn.addEventListener('click', () => {
+                if (currentSubmissionId) {
+                    markAsRead(currentSubmissionId);
+                }
+            });
+            
+            // Functions
+            function fetchSubmissions() {
+                fetch('/api/contact/submissions')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            submissionsContainer.innerHTML = '<div class="py-3 text-center text-gray-500">No submissions yet</div>';
+                            return;
+                        }
+                        
+                        submissionsContainer.innerHTML = '';
+                        
+                        // Display only the first 5 submissions
+                        const displayData = data.slice(0, 5);
+                        
+                        displayData.forEach(submission => {
+                            const submissionDate = new Date(submission.submitted_at);
+                            const timeAgo = getTimeAgo(submissionDate);
+                            
+                            const submissionElement = document.createElement('div');
+                            submissionElement.className = 'py-3 flex justify-between items-center';
+                            submissionElement.innerHTML = `
+                                <div>
+                                    <span class="font-medium block">${submission.name}</span>
+                                    <span class="text-gray-500 text-sm">${submission.message.substring(0, 50)}${submission.message.length > 50 ? '...' : ''}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-gray-500 text-sm block">${timeAgo}</span>
+                                    <button class="text-blue-600 hover:text-blue-800 text-sm mt-1 view-details" data-id="${submission.id}">
+                                        View Details
+                                    </button>
+                                </div>
+                            `;
+                            
+                            if (submission.is_read === 0) {
+                                submissionElement.classList.add('bg-blue-50');
+                            }
+                            
+                            submissionsContainer.appendChild(submissionElement);
+                        });
+                        
+                        // Add event listeners to view details buttons
+                        document.querySelectorAll('.view-details').forEach(button => {
+                            button.addEventListener('click', () => {
+                                const submissionId = button.getAttribute('data-id');
+                                viewSubmissionDetails(submissionId);
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching submissions:', error);
+                        submissionsContainer.innerHTML = '<div class="py-3 text-center text-red-500">Error loading submissions</div>';
+                    });
+            }
+            
+            function fetchUnreadCount() {
+                fetch('/api/contact/submissions/unread')
+                    .then(response => response.json())
+                    .then(data => {
+                        unreadCountElement.textContent = `${data.unreadCount} Unread`;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching unread count:', error);
+                        unreadCountElement.textContent = 'Error';
+                    });
+            }
+            
+            function viewSubmissionDetails(id) {
+                fetch(`/api/contact/submissions/${id}`)
+                    .then(response => response.json())
+                    .then(submission => {
+                        currentSubmissionId = submission.id;
+                        
+                        const submissionDate = new Date(submission.submitted_at);
+                        const formattedDate = submissionDate.toLocaleString();
+                        
+                        submissionDetails.innerHTML = `
+                            <div>
+                                <span class="text-gray-600 block">Name:</span>
+                                <span class="font-medium">${submission.name}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 block">Email:</span>
+                                <span class="font-medium">${submission.email}</span>
+                            </div>
+                            ${submission.phone ? `
+                            <div>
+                                <span class="text-gray-600 block">Phone:</span>
+                                <span class="font-medium">${submission.phone}</span>
+                            </div>
+                            ` : ''}
+                            <div>
+                                <span class="text-gray-600 block">Message:</span>
+                                <p class="mt-1 p-3 bg-gray-50 rounded">${submission.message}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 block">Submitted:</span>
+                                <span class="font-medium">${formattedDate}</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 block">Status:</span>
+                                <span class="font-medium ${submission.is_read === 0 ? 'text-red-600' : 'text-green-600'}">
+                                    ${submission.is_read === 0 ? 'Unread' : 'Read'}
+                                </span>
+                            </div>
+                        `;
+                        
+                        // Show or hide mark as read button based on current status
+                        if (submission.is_read === 1) {
+                            markReadBtn.classList.add('hidden');
+                        } else {
+                            markReadBtn.classList.remove('hidden');
+                        }
+                        
+                        modal.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching submission details:', error);
+                        alert('Error loading submission details');
+                    });
+            }
+            
+            function markAsRead(id) {
+                fetch(`/api/contact/submissions/${id}/read`, {
+                    method: 'PUT'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update UI
+                            markReadBtn.classList.add('hidden');
+                            const statusElement = submissionDetails.querySelector('span:last-child');
+                            statusElement.textContent = 'Read';
+                            statusElement.classList.remove('text-red-600');
+                            statusElement.classList.add('text-green-600');
+                            
+                            // Refresh submissions and unread count
+                            fetchSubmissions();
+                            fetchUnreadCount();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error marking as read:', error);
+                        alert('Error updating submission status');
+                    });
+            }
+            
+            function getTimeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+                
+                let interval = Math.floor(seconds / 31536000);
+                if (interval >= 1) {
+                    return interval + ' year' + (interval === 1 ? '' : 's') + ' ago';
+                }
+                
+                interval = Math.floor(seconds / 2592000);
+                if (interval >= 1) {
+                    return interval + ' month' + (interval === 1 ? '' : 's') + ' ago';
+                }
+                
+                interval = Math.floor(seconds / 86400);
+                if (interval >= 1) {
+                    return interval + ' day' + (interval === 1 ? '' : 's') + ' ago';
+                }
+                
+                interval = Math.floor(seconds / 3600);
+                if (interval >= 1) {
+                    return interval + ' hour' + (interval === 1 ? '' : 's') + ' ago';
+                }
+                
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) {
+                    return interval + ' minute' + (interval === 1 ? '' : 's') + ' ago';
+                }
+                
+                return Math.floor(seconds) + ' second' + (seconds === 1 ? '' : 's') + ' ago';
+            }
+        });
+    </script>
+</body>
+</html>

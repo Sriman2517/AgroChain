@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AgroChain - For Retailers</title>
+        <link rel="stylesheet" href="/styles/retaileruser.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body>
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <a href="/index" class="logo">
+                <img src="https://i.ibb.co/6RYjdgBf/logo-3-off-1.png" alt="Logo" height="60" width="280">
+            </a>
+            
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+    
+            <div class="nav-links">
+                <a href="/index">Home</a>
+                <a href="/aboutus">About Us</a>
+                
+                <div class="dropdown">
+                    <div class="dropdown-toggle">Features</div>
+                    <div class="dropdown-menu">
+                    <a href="/feature1">Invoicing &amp; Payments</a>
+                    <a href="/feature2">Inventory Management</a>
+                    <a href="/feature3">Contract Management</a>
+                    <a href="/feature4">Delivery Tracking</a>
+                    </div>
+                </div>
+    
+                <div class="dropdown">
+                    <div class="dropdown-toggle">Users</div>
+                    <div class="dropdown-menu">
+                        <a href="/farmeruser">Farmers</a>
+                        <a href="/delaruser">Distributors</a>
+                        <a href="/retaileruser">Retailers</a>
+                    </div>
+                </div>
+    
+                <a href="tel:1300565005" class="phone-number">7416995503</a>
+                <div class="buttons">
+                    <button class="btn btn-signin"><a href="/login">Login</a></button>
+                    <button class="btn btn-demo">Request Demo</button>
+                </div>
+            </div>
+        </nav>
+
+<!-- Demo Request Popup Form -->
+<div id="demoRequestPopup" class="popup-container">
+    <div class="popup-content">
+        <span class="close-popup">×</span>
+        <div class="popup-header">
+            <img src="https://i.ibb.co/p6C5VK89/Agochain-logo.png" alt="AgroChain Logo" class="popup-logo">
+            <h2>Let's Connect</h2>
+            <p>5000+ Organisations Trust AgroChain to manage inventory, sites, and trucks better. Get in touch to know more.</p>
+        </div>
+        <form id="demoRequestForm">
+            <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required="">
+            </div>
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" placeholder="name@website.com" required="">
+            </div>
+            <div class="form-group">
+                <label for="phone">Contact Number *</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 9999999999" required="">
+            </div>
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" rows="4" required=""></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+    <section class="hero farmer-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Streamline Retail Success with AgroChain</h1>
+                <p>Effortlessly manage procurement, payments, and logistics. AgroChain simplifies your retail operations for maximum efficiency.</p>
+                <a href="/login" class="btn-primary">Try for Free</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://agrichain.com/wp-content/uploads/2020/02/device_mock-up_2.png" alt="AgroChain dashboard on multiple devices">
+            </div>
+        </div>
+    </section>
+
+    <section class="welcome-section">
+        <div class="container">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h2>Welcome to Retail Excellence</h2>
+                    <p>Optimize your agricultural retail business with our specialized platform designed for retailers.</p>
+                    <p>Our tools help you manage purchase orders, track inventory, process payments, and monitor deliveries - all in one integrated system.</p>
+                   
+                </div>
+                <div class="welcome-image">
+                    <img src="https://agrichain.com/wp-content/uploads/2018/09/farmer2.jpg" alt="Retail store image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Retailer Benefits &amp; Features</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-cart-plus"></i>
+                    <h3>Purchase Order Management</h3>
+                    <p>Create and manage purchase orders with ease. Track order status, maintain order history, and streamline the procurement process.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h3>Stock Receipt</h3>
+                    <p>Verify and document incoming stock efficiently. Ensure quality control and maintain accurate records of all received goods.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-box-open"></i>
+                    <h3>Inventory Management</h3>
+                    <p>Track stock levels, manage product details, and receive automatic notifications when it's time to reorder products.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-credit"></i>
+                    <h3>Payment Processing</h3>
+                    <p>Manage all financial transactions securely. Track payments, generate invoices, and maintain complete financial records for your business.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-truck-loading"></i>
+                    <h3>Delivery Tracking</h3>
+                    <p>Monitor the status of incoming deliveries in real-time. Get notifications for delivery updates and plan your operations accordingly.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-tags"></i>
+                    <h3>Product Traceability</h3>
+                    <p>Access detailed information about product origins, quality certifications, and journey through the supply chain to ensure transparency.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works For Retailers</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Register &amp; Create Profile</h3>
+                    <p>Sign up and create your retail business profile with details about your store and product requirements.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Browse Available Products</h3>
+                    <p>Explore the catalog of agricultural products available from verified distributors.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Place Orders</h3>
+                    <p>Create purchase orders for products you need, specifying quantity and delivery preferences.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Receive &amp; Verify Deliveries</h3>
+                    <p>Track incoming deliveries and verify received products against your purchase orders.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>Manage Inventory</h3>
+                    <p>Update your inventory system automatically and maintain optimal stock levels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2>What Retailers Say About Us</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="quote">"AgroChain has transformed our procurement process. We now have access to fresher products and can trace exactly where our inventory comes from."</div>
+                    <div class="author">- Anita Desai, Grocery Store Owner</div>
+                </div>
+                <div class="testimonial">
+                    <div class="quote">"The inventory management system has helped us reduce waste by 30%. We can now forecast demand more accurately and order just what we need."</div>
+                    <div class="author">- Rahul Verma, Supermarket Manager</div>
+                </div>
+                <div class="testimonial">
+                    <div class="quote">"Our customers love that we can provide detailed information about product origins. It's become a major selling point for our store."</div>
+                    <div class="author">- Lakshmi Nair, Organic Food Retailer</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Enhance Your Retail Business?</h2>
+            <p>Join hundreds of retailers who are already optimizing their operations with AgroChain's platform.</p>
+            <a href="/retailer" class="btn-primary">Join as Retailer</a>
+        </div>
+    </section> 
+    <script src="/scripts/retaileruser.js"></script>
+
+</body>
+</html>
